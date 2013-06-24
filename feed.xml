@@ -24,7 +24,7 @@
 &lt;a href="https://github.com/k0sukey/TiSystemSound"&gt;k0sukey/TiSystemSound&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id="section"&gt;使い方&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/k0sukey/TiSystemSound/blob/master/example/app.js"&gt;example/app.js&lt;/a&gt; をビルドすると、このもモジュールで鳴らすことのできるすべてのサウンドを Ti.UI.TableView で表示＆確認できます。
+&lt;p&gt;&lt;a href="https://github.com/k0sukey/TiSystemSound/blob/master/example/app.js"&gt;example/app.js&lt;/a&gt; をビルドすると、このモジュールで鳴らすことのできるすべてのサウンドを Ti.UI.TableView で表示＆確認できます。
 モジュールを require したら &lt;code&gt;play()&lt;/code&gt; するだけです。
 簡単ですね。
 &lt;small class="muted"&gt;typo があるかもしれませんので、発見したらぜひご連絡ください。&lt;/small&gt;&lt;/p&gt;

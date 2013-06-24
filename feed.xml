@@ -5,10 +5,51 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-06-23T12:17:00Z</updated>
+  <updated>2013-06-24T05:01:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>iOSのプリセットサウンドを鳴らそう</title>
+    <link rel="alternate" href="/blog/2013/06/24/ios.html"/>
+    <id>/blog/2013/06/24/ios.html</id>
+    <published>2013-06-24T05:01:00Z</published>
+    <updated>2013-06-24T05:01:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a href="/blog/2013/06/23/ticameraview.html"&gt;TiCameraView&lt;/a&gt; の副産物で iOS のプリセットサウンドを鳴らすモジュールを作りました。
+そもそも Titanium Mobile で API が用意されていると思ったのですがありませんでした。
+このモジュールのソースコードは GitHub にありますのでご自由にお使いください。
+&lt;a href="https://github.com/k0sukey/TiSystemSound"&gt;k0sukey/TiSystemSound&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id="section"&gt;使い方&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://github.com/k0sukey/TiSystemSound/blob/master/example/app.js"&gt;example/app.js&lt;/a&gt; をビルドすると、このもモジュールで鳴らすことのできるすべてのサウンドを Ti.UI.TableView で表示＆確認できます。
+モジュールを require したら &lt;code&gt;play()&lt;/code&gt; するだけです。
+簡単ですね。
+&lt;small class="muted"&gt;typo があるかもしれませんので、発見したらぜひご連絡ください。&lt;/small&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var TiSystemSound = require('be.k0suke.tisystemsound');
+TiSystemSound.play(TiSystemSound.NEW_MAIL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="section-1"&gt;プロパティとメソッド&lt;/h3&gt;
+
+&lt;h3 id="section-2"&gt;プロパティ&lt;/h3&gt;
+&lt;p&gt;ありません。&lt;/p&gt;
+
+&lt;h3 id="section-3"&gt;メソッド&lt;/h3&gt;
+
+&lt;h4 id="play"&gt;play&lt;/h4&gt;
+&lt;p&gt;プリセットサウンドを再生します。
+TiSystemSound.&lt;code&gt;NEW_MAIL&lt;/code&gt; / &lt;code&gt;MAIL_SENT&lt;/code&gt; / &lt;code&gt;VOICEMAIL&lt;/code&gt; / &lt;code&gt;RECEIVED_MESSAGE&lt;/code&gt; / &lt;code&gt;SENT_MESSAGE&lt;/code&gt; / &lt;code&gt;ALARM&lt;/code&gt; / &lt;code&gt;LOW_POWER&lt;/code&gt; / &lt;code&gt;SMS_RECEIVED1&lt;/code&gt; / &lt;code&gt;SMS_RECEIVED2&lt;/code&gt; / &lt;code&gt;SMS_RECEIVED3&lt;/code&gt; / &lt;code&gt;SMS_RECEIVED4&lt;/code&gt; / &lt;code&gt;SMS_RECEIVED5&lt;/code&gt; / &lt;code&gt;SMS_RECEIVED6&lt;/code&gt; / &lt;code&gt;TWEET_SENT&lt;/code&gt; / &lt;code&gt;ANTICIPATE&lt;/code&gt; / &lt;code&gt;BLOOM&lt;/code&gt; / &lt;code&gt;CALYPSO&lt;/code&gt; / &lt;code&gt;CHOO_CHOO&lt;/code&gt; / &lt;code&gt;DESCENT&lt;/code&gt; / &lt;code&gt;FANFARE&lt;/code&gt; / &lt;code&gt;LADDER&lt;/code&gt; / &lt;code&gt;MINUET&lt;/code&gt; / &lt;code&gt;NEWS_FLASH&lt;/code&gt; / &lt;code&gt;NOIR&lt;/code&gt; / &lt;code&gt;SHERWOOD_FOREST&lt;/code&gt; / &lt;code&gt;SPELL&lt;/code&gt; / &lt;code&gt;SUSPENSE&lt;/code&gt; / &lt;code&gt;TELEGRAPH&lt;/code&gt; / &lt;code&gt;TIPTOES&lt;/code&gt; / &lt;code&gt;TYPEWRITERS&lt;/code&gt; / &lt;code&gt;UPDATE&lt;/code&gt; / &lt;code&gt;USSD&lt;/code&gt; / &lt;code&gt;SIMTOOLKITCALLDROPPED&lt;/code&gt; / &lt;code&gt;SIMTOOLKITGENERATEBEEP&lt;/code&gt; / &lt;code&gt;SIMTOOLKITNEGATIVEACK&lt;/code&gt; / &lt;code&gt;SIMTOOLKITPOSITIVEACK&lt;/code&gt; / &lt;code&gt;SIMTOOLKITSMS&lt;/code&gt; / &lt;code&gt;TINK&lt;/code&gt; / &lt;code&gt;CT_BUSY&lt;/code&gt; / &lt;code&gt;CT_CONGESTION&lt;/code&gt; / &lt;code&gt;CT_PATH_ACK&lt;/code&gt; / &lt;code&gt;CT_ERROR&lt;/code&gt; / &lt;code&gt;CT_CALL_WAITING&lt;/code&gt; / &lt;code&gt;CT_KEYTONE2&lt;/code&gt; / &lt;code&gt;LOCK&lt;/code&gt; / &lt;code&gt;UNLOCK&lt;/code&gt; / &lt;code&gt;TOCK&lt;/code&gt; / &lt;code&gt;BEEP_BEEP&lt;/code&gt; / &lt;code&gt;RINGER_CHANGED&lt;/code&gt; / &lt;code&gt;PHOTO_SHUTTER&lt;/code&gt; / &lt;code&gt;SHAKE&lt;/code&gt; / &lt;code&gt;JBL_BEGIN&lt;/code&gt; / &lt;code&gt;JBL_CONFIRM&lt;/code&gt; / &lt;code&gt;JBL_CANCEL&lt;/code&gt; / &lt;code&gt;BEGIN_RECORD&lt;/code&gt; / &lt;code&gt;END_RECORD&lt;/code&gt; / &lt;code&gt;JBL_AMBIGUOUS&lt;/code&gt; / &lt;code&gt;JBL_NO_MATCH&lt;/code&gt; / &lt;code&gt;BEGIN_VIDEO_RECORD&lt;/code&gt; / &lt;code&gt;END_VIDEO_RECORD&lt;/code&gt; / &lt;code&gt;VC_INVITATION_ACCEPTED&lt;/code&gt; / &lt;code&gt;VC_RINGING&lt;/code&gt; / &lt;code&gt;VC_ENDED&lt;/code&gt; / &lt;code&gt;DTMF_0&lt;/code&gt; / &lt;code&gt;DTMF_1&lt;/code&gt; / &lt;code&gt;DTMF_2&lt;/code&gt; / &lt;code&gt;DTMF_3&lt;/code&gt; / &lt;code&gt;DTMF_4&lt;/code&gt; / &lt;code&gt;DTMF_5&lt;/code&gt; / &lt;code&gt;DTMF_6&lt;/code&gt; / &lt;code&gt;DTMF_7&lt;/code&gt; / &lt;code&gt;DTMF_8&lt;/code&gt; / &lt;code&gt;DTMF_9&lt;/code&gt; / &lt;code&gt;DTMF_STAR&lt;/code&gt; / &lt;code&gt;DTMF_POUND&lt;/code&gt; / &lt;code&gt;LONG_LOW_SHORT_HIGH&lt;/code&gt; / &lt;code&gt;SHORT_DOUBLE_HIGH&lt;/code&gt; / &lt;code&gt;SHORT_LOG_HIGH&lt;/code&gt; / &lt;code&gt;SHORT_DOUBLE_LOW&lt;/code&gt; / &lt;code&gt;MIDDLE_9_SHORT_DOUBLE&lt;/code&gt; から選択してください。&lt;/p&gt;
+
+&lt;h3 id="section-4"&gt;参考にさせていただいたサイト&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="http://iphonedevwiki.net/index.php/AudioServices"&gt;AudioServices - iPhone Development Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>TiCameraView でカメラをアプリに埋め込もう</title>
     <link rel="alternate" href="/blog/2013/06/23/ticameraview.html"/>

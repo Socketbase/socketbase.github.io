@@ -127,21 +127,96 @@
 
     <div class="container">
       <div id="main" class="row" role="main">
-        <h1>Articles tagged 'Module'</h1>
+        <div class="span9 blogbody">
+  <div class="page-header">
+    <h1>iOSのプリセットサウンドを鳴らそう</h1>
+  </div>
+  <p><a href="/blog/2013/06/23/ticameraview.html">TiCameraView</a> の副産物で iOS のプリセットサウンドを鳴らすモジュールを作りました。
+そもそも Titanium Mobile で API が用意されていると思ったのですがありませんでした。
+このモジュールのソースコードは GitHub にありますのでご自由にお使いください。
+<a href="https://github.com/k0sukey/TiSystemSound">k0sukey/TiSystemSound</a></p>
 
-  <p>Page 1 of 1</p>
+<h3 id="section">使い方</h3>
+<p><a href="https://github.com/k0sukey/TiSystemSound/blob/master/example/app.js">example/app.js</a> をビルドすると、このもモジュールで鳴らすことのできるすべてのサウンドを Ti.UI.TableView で表示＆確認できます。
+モジュールを require したら <code>play()</code> するだけです。
+簡単ですね。
+<small class="muted">typo があるかもしれませんので、発見したらぜひご連絡ください。</small></p>
 
-  
+<pre><code>var TiSystemSound = require('be.k0suke.tisystemsound');
+TiSystemSound.play(TiSystemSound.NEW_MAIL);
+</code></pre>
 
+<h3 id="section-1">プロパティとメソッド</h3>
+
+<h3 id="section-2">プロパティ</h3>
+<p>ありません。</p>
+
+<h3 id="section-3">メソッド</h3>
+
+<h4 id="play">play</h4>
+<p>プリセットサウンドを再生します。
+TiSystemSound.<code>NEW_MAIL</code> / <code>MAIL_SENT</code> / <code>VOICEMAIL</code> / <code>RECEIVED_MESSAGE</code> / <code>SENT_MESSAGE</code> / <code>ALARM</code> / <code>LOW_POWER</code> / <code>SMS_RECEIVED1</code> / <code>SMS_RECEIVED2</code> / <code>SMS_RECEIVED3</code> / <code>SMS_RECEIVED4</code> / <code>SMS_RECEIVED5</code> / <code>SMS_RECEIVED6</code> / <code>TWEET_SENT</code> / <code>ANTICIPATE</code> / <code>BLOOM</code> / <code>CALYPSO</code> / <code>CHOO_CHOO</code> / <code>DESCENT</code> / <code>FANFARE</code> / <code>LADDER</code> / <code>MINUET</code> / <code>NEWS_FLASH</code> / <code>NOIR</code> / <code>SHERWOOD_FOREST</code> / <code>SPELL</code> / <code>SUSPENSE</code> / <code>TELEGRAPH</code> / <code>TIPTOES</code> / <code>TYPEWRITERS</code> / <code>UPDATE</code> / <code>USSD</code> / <code>SIMTOOLKITCALLDROPPED</code> / <code>SIMTOOLKITGENERATEBEEP</code> / <code>SIMTOOLKITNEGATIVEACK</code> / <code>SIMTOOLKITPOSITIVEACK</code> / <code>SIMTOOLKITSMS</code> / <code>TINK</code> / <code>CT_BUSY</code> / <code>CT_CONGESTION</code> / <code>CT_PATH_ACK</code> / <code>CT_ERROR</code> / <code>CT_CALL_WAITING</code> / <code>CT_KEYTONE2</code> / <code>LOCK</code> / <code>UNLOCK</code> / <code>TOCK</code> / <code>BEEP_BEEP</code> / <code>RINGER_CHANGED</code> / <code>PHOTO_SHUTTER</code> / <code>SHAKE</code> / <code>JBL_BEGIN</code> / <code>JBL_CONFIRM</code> / <code>JBL_CANCEL</code> / <code>BEGIN_RECORD</code> / <code>END_RECORD</code> / <code>JBL_AMBIGUOUS</code> / <code>JBL_NO_MATCH</code> / <code>BEGIN_VIDEO_RECORD</code> / <code>END_VIDEO_RECORD</code> / <code>VC_INVITATION_ACCEPTED</code> / <code>VC_RINGING</code> / <code>VC_ENDED</code> / <code>DTMF_0</code> / <code>DTMF_1</code> / <code>DTMF_2</code> / <code>DTMF_3</code> / <code>DTMF_4</code> / <code>DTMF_5</code> / <code>DTMF_6</code> / <code>DTMF_7</code> / <code>DTMF_8</code> / <code>DTMF_9</code> / <code>DTMF_STAR</code> / <code>DTMF_POUND</code> / <code>LONG_LOW_SHORT_HIGH</code> / <code>SHORT_DOUBLE_HIGH</code> / <code>SHORT_LOG_HIGH</code> / <code>SHORT_DOUBLE_LOW</code> / <code>MIDDLE_9_SHORT_DOUBLE</code> から選択してください。</p>
+
+<h3 id="section-4">参考にさせていただいたサイト</h3>
 <ul>
-  
-    <li><a href="/blog/2013/06/24/ios.html">iOSのプリセットサウンドを鳴らそう</a> <span>Jun 24</span></li>
-  
-    <li><a href="/blog/2013/06/23/ticameraview.html">TiCameraView でカメラをアプリに埋め込もう</a> <span>Jun 23</span></li>
-  
+  <li><a href="http://iphonedevwiki.net/index.php/AudioServices">AudioServices - iPhone Development Wiki</a></li>
 </ul>
 
+</div>
+<div class="span3 bloginfo">
+  <dl class="dl-horizontal">
+    <dt class="muted">Date</dt>
+    <dd>June 24, 2013</dd>
+    <dt class="muted">Tags</dt>
+    <dd>
+      <ul class="unstyled">
+      
+        <li class="label"><a href="/blog/tags/titanium-mobile.html">Titanium Mobile</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/module.html">Module</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/ios.html">iOS</a></a></li>
+      
+    </dd>
+    <dt class="muted">Author</dt>
+    <dd>いそべこーすけ</dd>
+    
+    <dd>
+      <ul class="unstyled">
+      
+        <li class="socials"><a href="https://twitter.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-twitter icon-light"></i>
+          </span></a></li>
+      
+      
+        <li class="socials"><a href="https://www.facebook.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-facebook icon-light"></i>
+          </span></a></li>
+      
+      
+        <li class="socials"><a href="https://github.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-github-alt icon-light"></i>
+          </span></a></li>
+      
+      </ul>
+    </dd>
+    
+  </dl>
   
+  <ul id="pagination" class="unstyled">
+    
+    <li class="text-left">&laquo; <a href="/blog/2013/06/23/ticameraview.html">TiCameraView でカメラをアプリに埋め込もう</a></li>
+    
+    
+  </ul>
+  
+</div>
 
       </div>
 

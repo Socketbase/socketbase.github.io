@@ -70,7 +70,7 @@ win.open();
 &lt;p&gt;&lt;code&gt;videoQuality&lt;/code&gt; や &lt;code&gt;cameraPosition&lt;/code&gt;、&lt;code&gt;frameDuration&lt;/code&gt; が TiCameraView 用の特別なプロパティになります。
 &lt;code&gt;videoQuality&lt;/code&gt; は Ti.Media.showCamera のプロパティと同等のもの、&lt;code&gt;cameraPosition&lt;/code&gt; はフロント / バックカメラの初期値になります。
 &lt;code&gt;frameDuration&lt;/code&gt; は fps ですね。
-値を小さくするカクカクに、大きくすると滑らかになりますが、16 〜 30 程度を目安に調整してください。&lt;/p&gt;
+値を小さくするとカクカクに、大きくすると滑らかになりますが、16 〜 30 程度を目安に調整してください。&lt;/p&gt;
 
 &lt;h4 id="section-2"&gt;写真の撮影&lt;/h4&gt;
 &lt;p&gt;Ti.Media.showCamera と同じように、&lt;code&gt;success&lt;/code&gt; / &lt;code&gt;error&lt;/code&gt; コールバックを指定しながら撮影することができます。

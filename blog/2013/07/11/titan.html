@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     
-    <title>TiCameraView でカメラをアプリに埋め込もう / Socketbase blog</title>
+    <title>Titan になりました / Socketbase blog</title>
     
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -132,166 +132,29 @@
       <div id="main" class="row" role="main">
         <div class="span9 blogbody">
   <div class="page-header">
-    <h1>TiCameraView でカメラをアプリに埋め込もう</h1>
+    <h1>Titan になりました</h1>
   </div>
-  <p>Titanium Mobile にデフォルトで用意されている Ti.Media.showCamera とはひと味ちがう TiCameraView モジュールを作ってみました。
-このモジュールのソースコードは GitHub にありますのでご自由にお使いください。
-<a href="https://github.com/k0sukey/TiCameraView">k0sukey/TiCameraView</a></p>
+  <p>みなさまこんにちは。
+本日は特別なご挨拶をさせていただきます。
+この度、Titanium Titans の一員に加えさせてもらえることになりました（<a href="http://developer.appcelerator.com/devlink/profile/1233606">DevLink のプロフィールページ</a>をご覧ください）。</p>
 
-<p>TiCameraView はカメラからの画像をリアルタイムに Ti.UI.ImageView へ流し込むモジュールです。
-Ti.Media.showCamera では API をコールするとカメラ専用のピッカーが表示されてしまいますが、TiCameraView は通常のウィンドウへ（もちろんビューにも）直に貼り付けることができます。</p>
+<p>思い起こせば私が Titanium Mobile と出会ってからもうすぐ、2 年と半年を迎えようとしております。
+飽きっぽい性格の私がここまで一つの技術を追い続けてこられたのも、Titanium Mobile 自体が面白いこともさることながら、日本の Titanium コミュニティが最高だということです。</p>
 
-<p><img src="/images/blog/TiCameraView.png" alt="TiCameraView" /></p>
-
-<h3 id="section">機能</h3>
-<p>Ti.Media.showCamera とほとんど同じことができます。</p>
-
-<ul>
-  <li>写真撮影</li>
-  <li>動画撮影</li>
-  <li>カメラの切り替え</li>
-</ul>
-
-<p>将来的に追加したい機能は以下の通りです。</p>
-
-<ul>
-  <li>動画撮影時に音声も</li>
-  <li>オーバレイしている Ti.UI.Label や Ti.UI.ImageView の合成（現状 add することはできますが、撮影された写真や動画に合成することはできません）</li>
-</ul>
-
-<h3 id="section-1">使い方</h3>
-<p>詳しくは GitHub のレポジトリにある <a href="https://github.com/k0sukey/TiCameraView/blob/master/example/app.js">example/app.js</a> をご覧ください。
-できることはひと通り網羅してあります。</p>
-
-<h4 id="cameraview-">CameraView の作り方</h4>
-<p>Titanium Mobile の UI パーツと同じように、モジュールを reauire したら <code>createView()</code> すれば OK です。
-簡単ですね。</p>
-
-<pre><code>var win = Ti.UI.createWindow();
-
-var TiCamera = require('be.k0suke.ticamera');
-var cameraView = TiCamera.createView({
-	width: 240,
-	height: 320,
-	backgroundColor: '#000',
-	videoQuality: TiCamera.QUALITY_MEDIUM,
-	cameraPosition: TiCamera.hasFrontCamera() ? TiCamera.CAMERA_FRONT : TiCamera.CAMERA_BACK,
-	frameDuration: 16
-});
-win.add(cameraView);
-
-win.open();
-</code></pre>
-
-<p><code>videoQuality</code> や <code>cameraPosition</code>、<code>frameDuration</code> が TiCameraView 用の特別なプロパティになります。
-<code>videoQuality</code> は Ti.Media.showCamera のプロパティと同等のもの、<code>cameraPosition</code> はフロント / バックカメラの初期値になります。
-<code>frameDuration</code> は fps ですね。
-値を小さくするとカクカクに、大きくすると滑らかになりますが、16 〜 30 程度を目安に調整してください。</p>
-
-<h4 id="section-2">写真の撮影</h4>
-<p>Ti.Media.showCamera と同じように、<code>success</code> / <code>error</code> コールバックを指定しながら撮影することができます。
-一点、異なる点は <code>shutterSound</code> ですね。
-シャッター音のオン / オフを指定することができます。
-オフにすると無音カメラにできてしまいますが、ご利用はご自身の責任でお願いします。</p>
-
-<pre><code>cameraView.takePicture({
-	saveToPhotoGallery: true,	// default false
-	shutterSound: false,		// default true
-	success: function(e){
-		// e.media(TiBlob), like Ti.Media.showCamera
-	},
-	error: function(e){
-	}
-});
-</code></pre>
-
-<p>シャッター音をオフにしながら setInterval で連続撮影してみたりすると、QR コードを読み取るカメラができそうですね。
-ただ、setInterval しながら <code>saveToPhotoGallery</code> を true にすると、カメラロールが大惨事になることがありますのでご注意ください。
-<small class="muted">もしかしたら定期的に写真を取得できるイベントリスナを作るかもしれません。
-そちらのほうが現実的ですよね。</small></p>
-
-<h4 id="section-3">動画の撮影</h4>
-<p>こちらも Ti.Media.showCamera と同じように、<code>success</code> / <code>error</code> コールバックを指定しながら撮影することができます。
-<code>recordingSound</code> で撮影音のオン / オフができます。
-こちらも無音カメラにできてしまいますので、ご利用はご自身の責任でお願いします。</p>
-
-<pre><code>cameraView.startRecording({
-	recordingSound: false		// default true
-});
-
-cameraView.stopRecording({
-	saveToPhotoGallery: true,	// default false
-	recordingSound: false,		// default true
-	success: function(e){
-		// e.media(TiBlob), like Ti.Media.showCamera
-	},
-	error: function(e){
-	}
-});
-</code></pre>
-
-<p><code>startRecording()</code> メソッドで撮影を開始して、<code>stopRecording()</code> で完了します。
-もちろん <code>startRecording()</code> の前に <code>stopRecording()</code> はできません。
-example/app.js では、撮影後に Ti.Media.videoPlayer で撮影した動画を再生していますので参考にしてみてください。</p>
-
-<h3 id="section-4">プロパティとメソッド</h3>
-
-<h3 id="section-5">プロパティ</h3>
-
-<h4 id="videoquality">videoQuality</h4>
-<p><code>createView()</code> する際に指定してください。
-TiCamera.<code>QUALITY_PHOTO</code> / <code>QUALITY_HIGH</code> / <code>QUALITY_MEDIUM</code> / <code>QUALITY_LOW</code> / <code>QUALITY_640x480</code> / <code>QUALITY_1280x720</code> から選択してください。</p>
-
-<h4 id="cameraposition">cameraPosition</h4>
-<p><code>createView()</code> する際に指定してください。
-TiCamera.<code>CAMERA_FRONT</code> / <code>CAMERA_BACK</code> のどちらかを選択してください。
-フロント / バックのカメラが端末でサポートされているかは、TiCamera.<code>hasFrontCamera()</code> / <code>hasBackCamera()</code> メソッドで調べることができます。</p>
-
-<h4 id="frameduration">frameDuration</h4>
-<p><code>createView()</code> する際に指定してください。
-16 〜 30 程度を目安に fps を指定します。</p>
-
-<h3 id="section-6">メソッド</h3>
-
-<h4 id="createview">createView</h4>
-<p>TiCameraView を作ります。</p>
-
-<h4 id="hasfrontcamera--hasbackcamera">hasFrontCamera / hasBackCamera</h4>
-<p>フロント / バックのカメラが端末でサポートされているか調べることができます。</p>
-
-<h4 id="togglecamera">toggleCamera</h4>
-<p>フロント / バックのカメラを交互に切り替えることができます。</p>
-
-<h4 id="takepicture">takePicture</h4>
-<p>写真を撮影することができます。
-このメソッドは <code>createView()</code> で作った TiCameraView で利用してください。</p>
-
-<h4 id="startrecording--stoprecording">startRecording / stopRecording</h4>
-<p>動画を撮影することができます。
-cameraView.<code>startRecording()</code> で撮影を開始し、cameraView.<code>stopRecording()</code> で完了します。
-このメソッドは <code>createView()</code> で作った TiCameraView で利用してください。</p>
-
-<h3 id="section-7">参考にさせていただいたサイト</h3>
-<ul>
-  <li><a href="http://dev.classmethod.jp/smartphone/ios-camera-intro/">iOSのカメラ機能を使う方法まとめ【13日目】 ｜ Developers.IO</a></li>
-  <li><a href="http://blog.azzip-azzip.com/2013/04/avassetwriterinputpixelbufferadaptor_avfoundation/">AVFoundationでキャプチャした画像をAVAssetWriterInputPixelBufferAdaptorクラスを使って映像生成 ›  blog.azzip-azzip.com</a></li>
-</ul>
-
+<p>Titan の名に恥じぬよう、微力ながら引き続き Titanium コミュニティへ貢献して参りますので、今後ともよろしくお願いいたします！</p>
 
 </div>
 <div class="span3 bloginfo">
   <dl class="dl-horizontal">
     <dt class="muted">Date</dt>
-    <dd>June 23, 2013</dd>
+    <dd>July 11, 2013</dd>
     <dt class="muted">Tags</dt>
     <dd>
       <ul class="unstyled">
       
         <li class="label"><a href="/blog/tags/titanium-mobile.html">Titanium Mobile</a></a></li>
       
-        <li class="label"><a href="/blog/tags/module.html">Module</a></a></li>
-      
-        <li class="label"><a href="/blog/tags/ios.html">iOS</a></a></li>
+        <li class="label"><a href="/blog/tags/.html">その他</a></a></li>
       
     </dd>
     <dt class="muted">Author</dt>
@@ -327,8 +190,8 @@ cameraView.<code>startRecording()</code> で撮影を開始し、cameraView.<cod
   
   <ul id="pagination" class="unstyled">
     
+    <li class="text-left">&laquo; <a href="/blog/2013/06/24/ios.html">iOS のプリセットサウンドを鳴らそう</a></li>
     
-    <li class="text-right"><a href="/blog/2013/06/24/ios.html">iOS のプリセットサウンドを鳴らそう</a> &raquo; </li>
     
   </ul>
   

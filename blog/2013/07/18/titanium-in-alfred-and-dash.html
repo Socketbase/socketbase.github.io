@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     
-    <title>Socketbase blog</title>
+    <title>Alfred と Dash の連携で Titanium API ドキュメントを見よう / Socketbase blog</title>
     
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -133,21 +133,110 @@
 
     <div class="container">
       <div id="main" class="row" role="main">
-        <h1>Articles tagged 'Module'</h1>
+        <div class="span9 blogbody">
+  <div class="page-header">
+    <h1>Alfred と Dash の連携で Titanium API ドキュメントを見よう</h1>
+  </div>
+  <p>最近教えていただいて、すごく捗るようになったのでご紹介します。
+今までは <a href="http://docs.appcelerator.com/titanium/latest/">Appcelerator の公式サイト</a>を読むことが多かったのですが、ネット環境がない場所では見ることさえできなくて困っていました。
+Sublime Text 2 でオフラインアクセスできるプラグインを作ったりもしましたが、どうにも見辛い…。</p>
 
-  <p>Page 1 of 1</p>
+<p>たまたま参加した <a href="http://talknote.me/vol8/event/">TalkNote × Frontrend</a> で、JavaScript のドキュメントは <a href="http://kapeli.com/dash">Dash</a> で簡単にオフラインで見ることができますよ、しかも <a href="http://www.alfredapp.com/">Alfred</a> と連携すると捗りますよとお聞きしました。
+普段から Titanium で JavaScript を書いていますので、これは良いことを聞いたと早速設定していたら… Titanium もあったー！と、いうことなのです。</p>
 
-  
+<p><img src="/images/blog/2013-07-18/dash-hud.png" alt="dash-hud" /></p>
 
-<ul>
-  
-    <li><a href="/blog/2013/06/24/ios.html">iOS のプリセットサウンドを鳴らそう</a> <span>Jun 24</span></li>
-  
-    <li><a href="/blog/2013/06/23/ticameraview.html">TiCameraView でカメラをアプリに埋め込もう</a> <span>Jun 23</span></li>
-  
-</ul>
+<ol>
+  <li>
+    <p>まずは Alfred と Dash をインストールしましょう。これがないと始まりません。
+Dash は有償ですが、たまに出てくる広告付きで無償のまま利用できます</p>
+  </li>
+  <li>
+    <p>Dash を起動して、Downloads の中から Appcelerator Titanium x.x.x をダウンロードします。
+この状態で、すでに Dash 単体で Titanium の API ドキュメントが閲覧可能です
+（Alloy な方はついでに BackboneJS と UnderscoreJS もダウンロードしておくと更に捗りますね）。
+Automatically download and install updates にチェックをしておくと、ドキュメントがバージョンアップした時勝手に更新してくれて便利です
+<img src="/images/blog/2013-07-18/dash-download.png" alt="dash-download" /></p>
+  </li>
+  <li>
+    <p>Alfred を起動して、Preferences から Fetures → Web Search を選択し、右下にある Add Custom Search をクリックします。
+Search URL は画像の通り入力してください。
+Title は他のものとあわせてあります。
+Keyword はお好みのもので。
+ぼくの場合はいつも無意識でタイプする、おなじみの「ti」ですね
+<img src="/images/blog/2013-07-18/alfred-setting.png" alt="alfred-setting" /></p>
+  </li>
+  <li>
+    <p>以上で完了です。
+おもむろにホットキーで Alfred を呼び出し、「ti window」と入力してエンターを叩いてください。
+冒頭のスナップショットのように、Dash が表示されましたか？
+ダメだった方は 3. の設定を見なおしてみてください
+<img src="/images/blog/2013-07-18/alfred-dash.png" alt="alfred-dash" /></p>
+  </li>
+</ol>
 
+<p>余談ですが、ぼくは Dash の表示を HUD モードにしています。
+コードを書きながら、調べたい時に Dash でドキュメントを表示→エディタに戻る→きれいサッパリ Dash がいなくなっている。
+この、コーディングをじゃまされない感が本当に快適で、そろそろ Dash にお金を支払おうと思っているところでした
+（HUD モードは、Dash の General → Window style から変更することができます）</p>
+
+</div>
+<div class="span3 bloginfo">
+  <dl class="dl-horizontal">
+    <dt class="muted">Date</dt>
+    <dd>July 18, 2013</dd>
+    <dt class="muted">Tags</dt>
+    <dd>
+      <ul class="unstyled">
+      
+        <li class="label"><a href="/blog/tags/titanium-mobile.html">Titanium Mobile</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/api.html">API</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/alfred.html">Alfred</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/dash.html">Dash</a></a></li>
+      
+    </dd>
+    <dt class="muted">Author</dt>
+    <dd>いそべこーすけ</dd>
+    
+    <dd>
+      <ul class="unstyled">
+      
+        <li class="socials"><a href="https://twitter.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-twitter icon-light"></i>
+          </span></a></li>
+      
+      
+        <li class="socials"><a href="https://www.facebook.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-facebook icon-light"></i>
+          </span></a></li>
+      
+      
+        <li class="socials"><a href="https://github.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-github-alt icon-light"></i>
+          </span></a></li>
+      
+      </ul>
+    </dd>
+    
+  </dl>
   
+  <ul id="pagination" class="unstyled">
+    
+    <li class="text-left">&laquo; <a href="/blog/2013/07/11/titan.html">Titan になりました</a></li>
+    
+    
+  </ul>
+  
+</div>
 
       </div>
 

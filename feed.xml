@@ -5,10 +5,63 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-07-11T07:49:00Z</updated>
+  <updated>2013-07-17T23:30:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Alfred と Dash の連携で Titanium API ドキュメントを見よう</title>
+    <link rel="alternate" href="/blog/2013/07/18/titanium-in-alfred-and-dash.html"/>
+    <id>/blog/2013/07/18/titanium-in-alfred-and-dash.html</id>
+    <published>2013-07-17T23:30:00Z</published>
+    <updated>2013-07-17T23:30:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;最近教えていただいて、すごく捗るようになったのでご紹介します。
+今までは &lt;a href="http://docs.appcelerator.com/titanium/latest/"&gt;Appcelerator の公式サイト&lt;/a&gt;を読むことが多かったのですが、ネット環境がない場所では見ることさえできなくて困っていました。
+Sublime Text 2 でオフラインアクセスできるプラグインを作ったりもしましたが、どうにも見辛い…。&lt;/p&gt;
+
+&lt;p&gt;たまたま参加した &lt;a href="http://talknote.me/vol8/event/"&gt;TalkNote × Frontrend&lt;/a&gt; で、JavaScript のドキュメントは &lt;a href="http://kapeli.com/dash"&gt;Dash&lt;/a&gt; で簡単にオフラインで見ることができますよ、しかも &lt;a href="http://www.alfredapp.com/"&gt;Alfred&lt;/a&gt; と連携すると捗りますよとお聞きしました。
+普段から Titanium で JavaScript を書いていますので、これは良いことを聞いたと早速設定していたら… Titanium もあったー！と、いうことなのです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/images/blog/2013-07-18/dash-hud.png" alt="dash-hud" /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;まずは Alfred と Dash をインストールしましょう。これがないと始まりません。
+Dash は有償ですが、たまに出てくる広告付きで無償のまま利用できます&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Dash を起動して、Downloads の中から Appcelerator Titanium x.x.x をダウンロードします。
+この状態で、すでに Dash 単体で Titanium の API ドキュメントが閲覧可能です
+（Alloy な方はついでに BackboneJS と UnderscoreJS もダウンロードしておくと更に捗りますね）。
+Automatically download and install updates にチェックをしておくと、ドキュメントがバージョンアップした時勝手に更新してくれて便利です
+&lt;img src="/images/blog/2013-07-18/dash-download.png" alt="dash-download" /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Alfred を起動して、Preferences から Fetures → Web Search を選択し、右下にある Add Custom Search をクリックします。
+Search URL は画像の通り入力してください。
+Title は他のものとあわせてあります。
+Keyword はお好みのもので。
+ぼくの場合はいつも無意識でタイプする、おなじみの「ti」ですね
+&lt;img src="/images/blog/2013-07-18/alfred-setting.png" alt="alfred-setting" /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;以上で完了です。
+おもむろにホットキーで Alfred を呼び出し、「ti window」と入力してエンターを叩いてください。
+冒頭のスナップショットのように、Dash が表示されましたか？
+ダメだった方は 3. の設定を見なおしてみてください
+&lt;img src="/images/blog/2013-07-18/alfred-dash.png" alt="alfred-dash" /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;余談ですが、ぼくは Dash の表示を HUD モードにしています。
+コードを書きながら、調べたい時に Dash でドキュメントを表示→エディタに戻る→きれいサッパリ Dash がいなくなっている。
+この、コーディングをじゃまされない感が本当に快適で、そろそろ Dash にお金を支払おうと思っているところでした
+（HUD モードは、Dash の General → Window style から変更することができます）&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Titan になりました</title>
     <link rel="alternate" href="/blog/2013/07/11/titan.html"/>

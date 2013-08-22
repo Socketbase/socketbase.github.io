@@ -5,10 +5,121 @@
   <id>http://blog.url.com/</id>
   <link href="http://blog.url.com/"/>
   <link href="http://blog.url.com/feed.xml" rel="self"/>
-  <updated>2013-07-17T23:30:00Z</updated>
+  <updated>2013-08-22T07:30:00Z</updated>
   <author>
     <name>Blog Author</name>
   </author>
+  <entry>
+    <title>Titanium で ISRefreshControl を使おう</title>
+    <link rel="alternate" href="/blog/2013/08/22/tiisrefreshcontrol.html"/>
+    <id>/blog/2013/08/22/tiisrefreshcontrol.html</id>
+    <published>2013-08-22T07:30:00Z</published>
+    <updated>2013-08-22T07:30:00Z</updated>
+    <author>
+      <name>Article Author</name>
+    </author>
+    <content type="html">&lt;p&gt;Titanium で Pull-to-Refresh、イベント処理（scroll / dragend）やフラグ管理が面倒ですよね。
+最近だと &lt;a href="https://twitter.com/FokkeZB"&gt;@FokkeZB&lt;/a&gt; さん作の &lt;a href="https://github.com/FokkeZB/nl.fokkezb.pullToRefresh"&gt;nl.fokkezb.pullToRefresh&lt;/a&gt; が Alloy の Widget として使えて、ずいぶん便利になってきています。&lt;/p&gt;
+
+&lt;p&gt;ただ、やっぱり iOS6 から使える、UIRefreshControl が使いたいところです。
+びよーんって伸びて無駄に引っ張りたくなっちゃいます。
+Titanium でも使いたくて UIRefreshControl したくて&lt;a href="https://github.com/k0sukey/TiExtendView"&gt;モジュール&lt;/a&gt;を書いたりしましたが、iOS6 のみなのがネックでした。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/images/blog/TiISRefreshControl.png" alt="TiISRefreshControl" /&gt;&lt;/p&gt;
+
+&lt;p&gt;そこで &lt;a href="https://github.com/ishkawa/ISRefreshControl"&gt;ISRefreshControl&lt;/a&gt; の力を借りてしまおうということです。
+これは iOS4 / iOS5 でも UIRefreshControl の様に振る舞ってくれる、素敵なライブラリです。
+何としてでも Titanium で使いたいところです。&lt;/p&gt;
+
+&lt;p&gt;と、言うわけで、&lt;a href="https://github.com/k0sukey/TiISRefreshControl"&gt;TiISRefreshControl&lt;/a&gt; を書きました。
+それでは簡単な使い方をご説明します。
+このモジュールはソースコード内で require する必要はありません。
+tiapp.xml の &amp;lt;module&amp;gt; に記述するだけで Ti.UI.TableView と Ti.UI.ListView に Pull-to-Refresh を提供します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;modules&amp;gt;
+    &amp;lt;module platform="iphone"&amp;gt;be.k0suke.tiisrefreshcontrol&amp;lt;/module&amp;gt;
+&amp;lt;/modules&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ti.UI.TableView を例にしてみましょう。以下のコードだけで簡単に Pull-to-Refresh の挙動を実現することができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var tableView = Ti.UI.createTableView({
+	data: [
+		{ title: 'row0' },
+		{ title: 'row1' },
+		{ title: 'row2' },
+		{ title: 'row3' },
+		{ title: 'row4' },
+		{ title: 'row5' },
+		{ title: 'row6' },
+		{ title: 'row7' },
+		{ title: 'row8' },
+		{ title: 'row9' }
+	]
+});
+
+tableView.addEventListener('refreshstart', function(){
+	setTimeout(function(){
+		tableView.refreshFinish();
+	}, 5000);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;では、実際にデータを取得してからの処理はどうでしょうか。
+Alloy のデータバインディングとあわせてご覧ください。&lt;/p&gt;
+
+&lt;h2 id="view"&gt;View&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;Window&amp;gt;
+	&amp;lt;ListView id="lists" defaultItemTemplate="list"&amp;gt;
+		&amp;lt;Templates&amp;gt;
+			&amp;lt;ItemTemplate name="list"&amp;gt;
+				&amp;lt;Label bindId="name" class="name"/&amp;gt;
+			&amp;lt;/ItemTemplate&amp;gt;
+		&amp;lt;/Templates&amp;gt;
+
+		&amp;lt;ListSection id="section" dataCollection="lists" dataTransform="doTransform"&amp;gt;
+			&amp;lt;ListItem template="list" name:text="{name}"/&amp;gt;
+		&amp;lt;/ListSection&amp;gt;
+	&amp;lt;/ListView&amp;gt;
+&amp;lt;/Window&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id="controller"&gt;Controller&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;var lists = Alloy.Collections.lists;
+
+function doTransform(model) {
+	return model.toJSON();
+}
+
+$.lists.addEventListener('refreshstart', function(){
+	lists.fetch({
+		success: function(){
+			$.lists.refreshFinish();
+		},
+		error: function(){
+			$.lists.refreshFinish();
+		}
+	});
+});
+
+$.index.addEventListener('open', function(){
+	$.lists.refreshBegin();
+});
+
+$.index.open();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ウィンドウである $.index を開くと同時に Ti.UI.ListView の refreshBegin メソッドを実行します。
+このメソッドは、ListView を引っ張る挙動をコードから実行してくれます。
+データの受信が完了したら refreshstart イベントが発火すると lists コレクションのフェッチが実行されます。
+データの受信が成功失敗にかかわらずインジケータを消してあげないといけませんので、success / error 両方で refreshFinish メソッドを実行します。&lt;/p&gt;
+
+&lt;p&gt;というわけで、簡単に UIRefreshControl を Titanium で使えるようにするモジュールのご紹介でした。
+他にも細かなメソッドやイベントがありますので、詳しくは &lt;a href="https://github.com/k0sukey/TiISRefreshControl"&gt;GitHub の README&lt;/a&gt; をご覧ください。&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Alfred と Dash の連携で Titanium API ドキュメントを見よう</title>
     <link rel="alternate" href="/blog/2013/07/18/titanium-in-alfred-and-dash.html"/>

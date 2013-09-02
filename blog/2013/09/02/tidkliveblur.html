@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     
-    <title>Titan になりました / Socketbase blog</title>
+    <title>Titanium で DKLiveBlur を使おう / Socketbase blog</title>
     
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -135,29 +135,79 @@
       <div id="main" class="row" role="main">
         <div class="span9 blogbody">
   <div class="page-header">
-    <h1>Titan になりました</h1>
+    <h1>Titanium で DKLiveBlur を使おう</h1>
   </div>
-  <p>みなさまこんにちは。
-本日は特別なご挨拶をさせていただきます。
-この度、Titanium Titans の一員に加えさせてもらえることになりました（<a href="http://developer.appcelerator.com/devlink/profile/1233606">DevLink のプロフィールページ</a>をご覧ください）。</p>
+  <p>みなさま、iOS7 対応いかがでしょうか？
+ぼくはいま作っている趣味アプリを iOS7 風な見た目にするべくがんばっている最中です。</p>
 
-<p>思い起こせば私が Titanium Mobile と出会ってからもうすぐ、2 年と半年を迎えようとしております。
-飽きっぽい性格の私がここまで一つの技術を追い続けてこられたのも、Titanium Mobile 自体が面白いこともさることながら、日本の Titanium コミュニティが最高だということです。</p>
+<p>さて、今回は <a href="https://github.com/k0sukey/TiDKLiveBlur">TiDKLiveBlur</a> のご紹介です。</p>
 
-<p>Titan の名に恥じぬよう、微力ながら引き続き Titanium コミュニティへ貢献して参りますので、今後ともよろしくお願いいたします！</p>
+<p><img src="/images/blog/TiDKLiveBlur.png" alt="TiDKLiveView" /></p>
+
+<p><a href="https://github.com/kronik/DKLiveBlur">DKLiveBlur</a> という、スクロールできるビューの背景画像へ、スクロールさせると動的に曇ったような、スリガラス効果を加えてくれるライブラリを Titanium でも利用できるようにしたモジュールです。
+これで iOS7 風なビューを作ることができますね！</p>
+
+<p>それでは簡単な使い方をご説明します。
+このモジュールはソースコード内で require する必要はありません。
+tiapp.xml の &lt;module&gt; に記述するだけで Ti.UI.TableView と Ti.UI.ListView にスリガラス効果を提供します。</p>
+
+<pre><code>&lt;modules&gt;
+    &lt;module platform="iphone"&gt;be.k0suke.tidkliveblur&lt;/module&gt;
+&lt;/modules&gt;
+</code></pre>
+
+<p>Ti.UI.TableView を例にしてみましょう。</p>
+
+<pre><code>var tableView = Ti.UI.createTableView({
+	backgroundBlurImage: '/background.png',
+	glassColor: '#fff', // optional, default #fff
+	data: [
+		{ title: 'row0' },
+		{ title: 'row1' },
+		{ title: 'row2' },
+		{ title: 'row3' },
+		{ title: 'row4' },
+		{ title: 'row5' },
+		{ title: 'row6' },
+		{ title: 'row7' },
+		{ title: 'row8' },
+		{ title: 'row9' }
+	]
+});
+</code></pre>
+
+<p>Ti.UI.TableView（Ti.UI.ListView）に backgroundBlurImage と glassColor というプロパティが指定できるようになります。
+backgroundBlurImage にはスリガラス効果を加えたい背景画像を指定してください（backgroundImage と同じように、リモートの画像を指定することはできません）。
+glassColor は色を指定できます。
+デフォルトは白ですが、Titanium で指定できるカラーコードならなんでも指定することができますので、色々お試しください。</p>
+
+<p>一点注意が必要で、ある程度のデータ数がないとスクロールできる縦幅が発生しないので、データ数が少ない場合スリガラス効果が発生しないでスクロールが終了してしまう可能性があります。
+Ti.UI.TableView であれば、setContentInsets メソッドで top のマージンをある程度確保してあげれば、良い感じに効果が発生するかと思います（現時点での最新版 SDK3.1.2.GA で Ti.UI.ListView の setContentInsets は残念ながら未実装です）。</p>
+
+<pre><code>tableView.setContentInsets({
+	top: 400,
+	right: 0,
+	bottom: 0,
+	left: 0
+});
+</code></pre>
+
+<p>というわけで、DKLiveBlur を Titanium で使えるようにするモジュールのご紹介でした。</p>
 
 </div>
 <div class="span3 bloginfo">
   <dl class="dl-horizontal">
     <dt class="muted">Date</dt>
-    <dd>July 11, 2013</dd>
+    <dd>September 02, 2013</dd>
     <dt class="muted">Tags</dt>
     <dd>
       <ul class="unstyled">
       
         <li class="label"><a href="/blog/tags/titanium-mobile.html">Titanium Mobile</a></a></li>
       
-        <li class="label"><a href="/blog/tags/.html">その他</a></a></li>
+        <li class="label"><a href="/blog/tags/module.html">Module</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/ios.html">iOS</a></a></li>
       
     </dd>
     <dt class="muted">Author</dt>
@@ -193,10 +243,8 @@
   
   <ul id="pagination" class="unstyled">
     
-    <li class="text-left">&laquo; <a href="/blog/2013/06/24/ios.html">iOS のプリセットサウンドを鳴らそう</a></li>
+    <li class="text-left">&laquo; <a href="/blog/2013/08/22/tiisrefreshcontrol.html">Titanium で ISRefreshControl を使おう</a></li>
     
-    
-    <li class="text-right"><a href="/blog/2013/07/18/titanium-in-alfred-and-dash.html">Alfred と Dash の連携で Titanium API ドキュメントを見よう</a> &raquo; </li>
     
   </ul>
   

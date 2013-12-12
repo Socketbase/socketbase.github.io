@@ -1,0 +1,541 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    
+    <title>Android で意図された順序の JSON を Ti.Netwrok.HTTPClient で送信してみよう / Socketbase blog</title>
+    
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet">
+    <style type="text/css">
+      html,
+      body {
+        background-color: #f8f8f8;
+        font-family: Lato, sans-serif;
+        font-size: 16px;
+        line-height: 150%;
+      }
+      header {
+      }
+      header .container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+      #socket {
+        margin-top: 40px;
+      }
+      #socket .span8 {
+        height: 60px;
+        background-color: #f8f8f8;
+      }
+      #socket .span2 {
+        height: 60px;
+        background-color: #95191d;
+      }
+      #blogmeta {
+        background-color: #95191d;
+        color: #fff;
+      }
+      #blogmeta h2 {
+        padding-top: 40px;
+      }
+      #blogmeta h2,
+      #blogmeta ul {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+      #blogmeta a,
+      #blogmeta a:hover {
+        color: #fff;
+      }
+      footer {
+        background-color: #95191d;
+      }
+      #base {
+        padding-top: 40px;
+        padding-bottom: 20px;
+        color: #fff;
+      }
+      #base a,
+      #base a:hover {
+        color: #fff;
+      }
+      .blogbody {
+        padding-top: 20px;
+      }
+      .blogindex {
+        padding-left: 10px;
+        border-left: 5px solid #95191d;
+      }
+      h1 {
+        padding-left: 10px;
+        border-left: 5px solid #95191d;
+      }
+      li {
+        line-height: 24px;
+      }
+      pre code {
+        font-family: 'Source Code Pro', sans-serif;
+      }
+      .bloginfo {
+        background-color: #fff;
+        border-radius: 2px;
+        font-size: 115%;
+      }
+      .dl-horizontal dt {
+        width: 80px;
+        margin-bottom: 10px;
+      }
+      .dl-horizontal dd {
+        margin-bottom: 10px;
+        margin-left: 100px;
+      }
+      .dl-horizontal dd ul.unstyled {
+        margin-bottom: 0;
+      }
+      .dl-horizontal dd ul.unstyled .label a,
+      .dl-horizontal dd ul.unstyled .label a:hover {
+        color: #fff;
+        text-decoration: none;
+      }
+      .socials {
+        display: inline;
+        margin-right: 10px;
+      }
+      .socials .icon-stack {
+        margin-top: 10px;
+      }
+      #pagination {
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+      .paginate {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      #socialbutton {
+        padding-top: 40px;
+      }
+      #socialbutton li {
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container text-center">
+        <a href="/"><img src="/images/logo.png"></a>
+      </div>
+    </header>
+
+    <div class="container">
+      <div id="main" class="row" role="main">
+        <div class="span9 blogbody">
+  <div class="page-header">
+    <h1>Android で意図された順序の JSON を Ti.Netwrok.HTTPClient で送信してみよう</h1>
+  </div>
+  <p>こちらは <a href="http://www.adventar.org/calendars/78">Titanium™ Advent Calendar 2013</a> 用の記事になります。
+余談ですが、企画された <a href="https://twitter.com/astronaughts">@astronaughts</a> さんと、最近 Facebook で友達になりました。
+やったね！</p>
+
+<h3 id="section">はじめに</h3>
+<p>ぼくもちょこっとポエムを書かせてもらうと、今年は自分にとって大きな大きな 1 年でした。
+JavaScript で iOS / Android アプリが書けちゃうなんて！と、ゆるい気持ちで使い始めたのですが、なんと会社まで立ち上げて Titanium 三昧でございます（最近はモジュールばかり書いていますけど）。
+人生どうなるかわかりませんね。</p>
+
+<h3 id="section-1">それでは本題に</h3>
+
+<p>外部ウェブサービス API へ POST する際、JSON の中身が意図されている順序で送信しないと受け付けられない場合があります。
+AWS S3 へ直接ファイルをアップロードする場合等がそれですね。</p>
+
+<p>iOS の場合は <code>Ti.Network.HTTPClient</code> の <code>send()</code> メソッドで意図されている順序の JSON を渡せばその順序で送信されますが、Android の場合そうはいきません。
+<a href="https://github.com/appcelerator/titanium_mobile/blob/master/android/modules/network/src/java/ti/modules/titanium/network/TiHTTPClient.java#L1095">Titanium</a> のソースコードを見てみると、Android の <code>send()</code> メソッドは <code>HashMap</code> で受け取っているため JSON の順序が保持されていません。
+<code>LinkedHashMap</code> であれば保持されるそうで、この問題は起きないのですがいつかこちらに切り替わるのでしょうか（期待できません）。</p>
+
+<p>と、言うわけで、意図した通りの順序の JSON を送信する方法を探ってみましょう。
+ここでは S3 へ直接ファイルをアップロードする方法を例にあげます。</p>
+
+<h4 id="tinetworkhttpclient--send--json-">まずはいつも通り <code>Ti.Network.HTTPClient</code> で <code>send()</code> する際に JSON を渡してしてみます</h4>
+<p>file はカメラで撮影した写真のデータ（<code>Ti.Blob</code>）が格納されており、その他、各変数は S3 へアップロードするために必要な情報となります。</p>
+
+<pre><code>var xhr = Ti.Netwrok.createHTTPClient({
+	onload: function(){},
+	onerror: function(){}
+});
+xhr.open(url, 'POST');
+xhr.send({
+	"key": key,
+	"AWSAccessKeyId": AWSAccessKeyId,
+	"acl": acl,
+	"Content-Disposition": ContentDisposition,
+	"Content-Type": ContentType,
+	"success_action_redirect": successActionRedirect,
+	"x-amz-server-side-encryption": xAmzServerSideEncryption,
+	"policy": policy,
+	"signature": signature,
+	"file": file
+});
+</code></pre>
+
+<p>iOS はこれで問題なくアップロードできます。
+key から始まって file まで <code>send()</code>メソッドへ渡した際、JSON の順序が保持されているからです。
+Android の場合は S3 から順序が正しくないとエラーが返却されてきます。
+悲しいですね。</p>
+
+<p><a href="http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.Network.HTTPClient-method-send">リファレンス</a>を見てみましょう。
+<code>send()</code> メソッドは <code>Object</code> / <code>String</code> / <code>Ti.Filesystem.File</code> / <code>Ti.Blob</code> を指定することができます。
+上記の例では JSON、つまり、<code>Object</code> ですね。</p>
+
+<h4 id="android--http-">Android で順序を保持したデータを渡すには HTTP リクエストの中身を自分で記述していきます</h4>
+
+<p>早速 JSON から離れますが <code>String</code> で送信してみます。</p>
+
+<p>送信データを自前で記述する場合はいくつかのお作法があります。
+ファイルを送信するのでリクエストヘッダは <code>Content-Type: multipart/form-data</code> となります（JSON で渡した場合は <code>Ti.Blob</code> が入っていると、このヘッダを勝手につけてくれます）。
+さらに送信する内容一つずつに自前で区切りのサインを付けていかないとなりません。
+下記の例では <code>boundary</code> という変数で用意しております。
+こちらは任意の文字列となりますが、頭に必ず <code>--</code> を付けてください。
+例ではタイムスタンプを <code>Ti.Utils.md5HexDigest()</code> しています。
+また、一番最後の区切りには末尾にも <code>--</code> が必要となります。
+改行コード（<code>\r\n</code>）も自分で記述しないといけません。
+とても面倒ですね…。</p>
+
+<pre><code>// 区切り文字
+var boundary = Ti.Utils.md5HexDigest('' + Date.now());
+
+// 写真を Ti.Stream で開いて Ti.Buffer 化
+var stream = Ti.Stream.createStream({
+	mode : Ti.Stream.MODE_READ,
+	source: file
+});
+var buffer = Ti.Stream.readAll(stream);
+stream.close();
+
+// 送信データを文字列で組み立てる
+var data = '--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="key"\r\n\r\n' +
+	key + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="AWSAccessKeyId"\r\n\r\n' +
+	AWSAccessKeyId + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="acl"\r\n\r\n' +
+	acl + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="Content-Disposition"\r\n\r\n' +
+	ContentDisposition + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="Content-Type"\r\n\r\n' +
+	ContentType + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="success_action_redirect"\r\n\r\n' +
+	successActionRedirect + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="x-amz-server-side-encryption"\r\n\r\n' +
+	xAmzServerSideEncryption + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="policy"\r\n\r\n' +
+	policy + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="signature"\r\n\r\n' +
+	signature + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="file"; filename="image.jpg"\r\n' +
+	'Content-Type: binary/octet-stream\r\n\r\n' +
+	buffer.toString() + '\r\n' + // Ti.Buffer を文字列化
+	'--' + boundary + '--\r\n';
+
+// 送信
+var xhr = Ti.Netwrok.createHTTPClient({
+	onload: function(){},
+	onerror: function(){}
+});
+xhr.open(url, 'POST');
+xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+xhr.send(data);
+</code></pre>
+
+<p>写真データのファイルを <code>Ti.Stream</code> で開いて、<code>readAll()</code> で全て読み込んで <code>Ti.Buffer</code> にし、<code>toString()</code> で文字列化しています。
+これでどうでしょうか。</p>
+
+<p>アップロードは成功しますが、画像ファイルの <code>Ti.Buffer</code> を <code>toString()</code> するとゴミが付くらしく、ファイルが壊れてしまいます（自前のサーバにアップロードしたファイルをバイナリエディタで開いて正常な画像と比較して確認しました）。
+これでは意味がありませんね。</p>
+
+<p>メールをプログラムから送信したことがある方は、似たような記述をしますのでピンときたかと思います。
+<code>Ti.Buffer</code> が <code>toString()</code> すると壊れてしまうのなら、<code>Ti.Blob</code> なファイルを <code>Ti.Utils.base64encode().toString()</code> し、<code>Content-Transfer-Encoding: base64</code> を付けて Base64 で送れば良いじゃない、と。
+こんな感じですかね。</p>
+
+<pre><code>	'Content-Disposition: form-data; name="file"; filename="image.jpg"\r\n' +
+	'Content-Type: binary/octet-stream\r\n' +
+	'Content-Transfer-Encoding: base64\r\n\r\n' +
+	Ti.Utils.base64encode(file).toString() + '\r\n' +
+	'--' + boundary + '--\r\n';
+</code></pre>
+
+<p>…そもそも <code>Content-Transfer-Encoding</code> は<a href="https://forums.aws.amazon.com/thread.jspa?threadID=108144">メール用</a>なんですね。
+もちろん S3 はこのヘッダを受け付けてくれませんので、テキストファイルとしてアップロードされてしまいます。</p>
+
+<p>それではどうするのか。</p>
+
+<h4 id="send--tiblob-"><code>send()</code> メソッドに <code>Ti.Blob</code> として送信データを渡します</h4>
+
+<pre><code>// 区切り文字
+var boundary = Ti.Utils.md5HexDigest('' + Date.now());
+
+// 送信データを Ti.Buffer で組み立てる
+data = Ti.createBuffer({
+	value: '--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="key"\r\n\r\n' +
+	key + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="AWSAccessKeyId"\r\n\r\n' +
+	AWSAccessKeyId + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="acl"\r\n\r\n' +
+	acl + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="Content-Disposition"\r\n\r\n' +
+	ContentDisposition + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="Content-Type"\r\n\r\n' +
+	ContentType + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="success_action_redirect"\r\n\r\n' +
+	successActionRedirect + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="x-amz-server-side-encryption"\r\n\r\n' +
+	xAmzServerSideEncryption + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="policy"\r\n\r\n' +
+	policy + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="signature"\r\n\r\n' +
+	signature + '\r\n' +
+	'--' + boundary + '\r\n' +
+	'Content-Disposition: form-data; name="file"; filename="image.jpg"\r\n' +
+	'Content-Type: binary/octet-stream\r\n\r\n'
+});
+
+// 写真を Ti.Stream で開いて Ti.Buffer 化し、送信データへ追加
+stream = Ti.Stream.createStream({
+	mode : Ti.Stream.MODE_READ,
+	source: file
+});
+data.append(Ti.Stream.readAll(stream));
+stream.close();
+
+// 最後の区切り文字を追加
+data.append(Ti.createBuffer({
+	value: '\r\n--' + boundary + '--\r\n'
+}));
+
+// 送信
+var xhr = Ti.Netwrok.createHTTPClient({
+	onload: function(){},
+	onerror: function(){}
+});
+xhr.open(url, 'POST');
+xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+xhr.send(data.toBlob());
+</code></pre>
+
+<p>これでどうでしょう。
+見事ファイルも壊れずアップロードすることができました。</p>
+
+<p>ザックリと何をしているかというと、<code>Ti.Buffer</code> として送信データを作って、最後に <code>toBlob()</code> で <code>Ti.Blob</code> 化して送信しています。
+正直、何を書いているのか、わけがわからなくなりますね。</p>
+
+<h4 id="html-">最後にHTML のフォームに例えてみましょう</h4>
+
+<pre><code>&lt;form action="url" method="post" enctype="multipart/form-data"&gt;
+	&lt;input type="hidden" name="key" value="key"&gt;
+	&lt;input type="hidden" name="AWSAccessKeyId" value="AWSAccessKeyId"&gt;
+	&lt;input type="hidden" name="acl" value="acl"&gt;
+	&lt;input type="hidden" name="Content-Disposition" value="ContentDisposition"&gt;
+	&lt;input type="hidden" name="Content-Type" value="ContentType"&gt;
+	&lt;input type="hidden" name="success_action_redirect" value="successActionRedirect"&gt;
+	&lt;input type="hidden" name="x-amz-server-side-encryption" value="xAmzServerSideEncryption"&gt;
+	&lt;input type="hidden" name="policy" value="policy"&gt;
+	&lt;input type="hidden" name="signature" value="signature"&gt;
+	&lt;input type="file" name="file"&gt;
+	&lt;input type="submit" value="send"&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>HTML だととても簡単ですね！</p>
+
+<h3 id="section-2">〆</h3>
+<p>少々コードが煩雑になってしまうのであまりオススメできませんが、どうしてもという方はこちらの方法で送信することができます。
+ぼくは早く <code>LinkedHashMap</code> にならないかと、首を長くして待っております（まったく期待できません）。</p>
+
+<h3 id="section-3">14日目の方</h3>
+<p><a href="https://twitter.com/h5y1m141">@h5y1m141</a> さんです。
+ACS ネタ、楽しみですね！</p>
+
+</div>
+<div class="span3 bloginfo">
+  <dl class="dl-horizontal">
+    <dt class="muted">Date</dt>
+    <dd>December 13, 2013</dd>
+    <dt class="muted">Tags</dt>
+    <dd>
+      <ul class="unstyled">
+      
+        <li class="label"><a href="/blog/tags/titanium.html">Titanium</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/android.html">Android</a></a></li>
+      
+        <li class="label"><a href="/blog/tags/advent-calendar.html">Advent Calendar</a></a></li>
+      
+    </dd>
+    <dt class="muted">Author</dt>
+    <dd>いそべこーすけ</dd>
+    
+    <dd>
+      <ul class="unstyled">
+      
+        <li class="socials"><a href="https://twitter.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-twitter icon-light"></i>
+          </span></a></li>
+      
+      
+        <li class="socials"><a href="https://www.facebook.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-facebook icon-light"></i>
+          </span></a></li>
+      
+      
+        <li class="socials"><a href="https://github.com/k0sukey">
+          <span class="icon-stack">
+            <i class="icon-circle icon-stack-base"></i>
+            <i class="icon-github-alt icon-light"></i>
+          </span></a></li>
+      
+      </ul>
+    </dd>
+    
+  </dl>
+  
+  <ul id="pagination" class="unstyled">
+    
+    <li class="text-left">&laquo; <a href="/blog/2013/09/02/tidkliveblur.html">Titanium で DKLiveBlur を使おう</a></li>
+    
+    
+  </ul>
+  
+</div>
+
+      </div>
+
+      <div id="socialbutton" class="row">
+        <div class="span12">
+          <ul class="unstyled">
+            <li class="pull-left twitter"><a href="https://twitter.com/share" class="twitter-share-button twitter-count-vertical" data-lang="ja" data-count="vertical">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+            <li class="pull-left hatena"><script type="text/javascript" language="javascript">
+              document.write("<a href=\""+document.URL+"\" class=\"hatena-bookmark-button\" data-hatena-bookmark-title=\""+document.title+"\" data-hatena-bookmark-layout=\"vertical-balloon\" title=\"このエントリーをはてなブックマークに追加\"><img src=\"http://b.st-hatena.com/images/entry-button/button-only.gif\" alt=\"このエントリーをはてなブックマークに追加\" width=\"20\" height=\"20\" style=\"border: none;\" /></a>");</script>
+              <script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async">
+              </script></li>
+            <li class="pull-left facebook">
+              <script type="text/javascript" language="javascript">
+              document.write("<iframe src=\"//www.facebook.com/plugins/like.php?href="+document.URL+"&amp;width=70&amp;height=65&amp;colorscheme=light&amp;layout=box_count&amp;action=like&amp;show_faces=true&amp;send=true&amp;appId=203437546496909\" scrolling=\"no\" frameborder=\"0\" style=\"border:none; overflow:hidden; width:70px; height:65px;\" allowTransparency=\"true\"></iframe>");
+              </script></li>
+            <li class="pull-left googleplus"><div class="g-plusone" data-size="tall"></div>
+              <script type="text/javascript">
+              window.___gcfg = {lang: 'ja'};
+              (function() {
+              var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+              po.src = 'https://apis.google.com/js/plusone.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+              })();
+              </script></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="socket" class="container">
+      <div class="row">
+        <div class="span2"></div>
+        <div class="span8"></div>
+        <div class="span2"></div>
+      </div>
+    </div>
+
+    <div id="blogmeta" class="container">
+      <div class="row">
+        <div class="span4">
+          <h2>Recent Articles</h2>
+          <ul>
+            
+              <li><a href="/blog/2013/12/13/titaniumadventcalendar2013.html">Android で意図された順序の JSON を Ti.Netwrok.HTTPClient で送信してみよう</a> <span>Dec 13</span></li>
+            
+              <li><a href="/blog/2013/09/02/tidkliveblur.html">Titanium で DKLiveBlur を使おう</a> <span>Sep  2</span></li>
+            
+              <li><a href="/blog/2013/08/22/tiisrefreshcontrol.html">Titanium で ISRefreshControl を使おう</a> <span>Aug 22</span></li>
+            
+              <li><a href="/blog/2013/07/18/titanium-in-alfred-and-dash.html">Alfred と Dash の連携で Titanium API ドキュメントを見よう</a> <span>Jul 18</span></li>
+            
+              <li><a href="/blog/2013/07/11/titan.html">Titan になりました</a> <span>Jul 11</span></li>
+            
+              <li><a href="/blog/2013/06/24/ios.html">iOS のプリセットサウンドを鳴らそう</a> <span>Jun 24</span></li>
+            
+              <li><a href="/blog/2013/06/23/ticameraview.html">TiCameraView でカメラをアプリに埋め込もう</a> <span>Jun 23</span></li>
+            
+          </ul>
+        </div>
+
+        <div class="span4">
+          <h2>Tags</h2>
+          <ul>
+            
+              <li><a href="/blog/tags/titanium-mobile.html">Titanium Mobile</a> (6)</a></li>
+            
+              <li><a href="/blog/tags/module.html">Module</a> (4)</a></li>
+            
+              <li><a href="/blog/tags/ios.html">iOS</a> (4)</a></li>
+            
+              <li><a href="/blog/tags/.html">その他</a> (1)</a></li>
+            
+              <li><a href="/blog/tags/api.html">API</a> (1)</a></li>
+            
+              <li><a href="/blog/tags/alfred.html">Alfred</a> (1)</a></li>
+            
+              <li><a href="/blog/tags/dash.html">Dash</a> (1)</a></li>
+            
+              <li><a href="/blog/tags/titanium.html">Titanium</a> (1)</a></li>
+            
+              <li><a href="/blog/tags/android.html">Android</a> (1)</a></li>
+            
+              <li><a href="/blog/tags/advent-calendar.html">Advent Calendar</a> (1)</a></li>
+            
+          </ul>
+        </div>
+
+        <div class="span4">
+          <h2>By Year</h2>
+          <ul>
+            
+              <li><a href="/blog/2013.html">2013</a> (7)</a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div id="base" class="container">
+        <div class="row">
+          <div class="span12">
+            <p class="text-center"><a href="http://www.socketbase.co.jp">&copy; Socketbase Inc.</a></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
